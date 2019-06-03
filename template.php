@@ -1,4 +1,4 @@
-<!-- Home page -->
+<!-- Template page -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,9 +14,10 @@
     <main>
         <?php require_once "inc/header.php"; ?>
         <article>
-            <h1>Welcome, user!</h1>
+            <h1>The quick brown fox jumped over the lazy dog.</h1>
         </article>
         <aside>
+            <p>Kuku, boyo. Kuku.</p>
         </aside>
         <?php require_once "inc/footer.php"; ?>
     </main>

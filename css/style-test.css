@@ -1,17 +1,8 @@
-/* Remove default browser margins for these elements */
-
-body, header, h1, nav, ul, li {
+body {
+    background-color: #333;
+    font-family: Poppins, sans-serif;
     margin: 0;
     padding: 0;
-}
-
-/* Apply these styles everywhere on the page */
-
-body {
-    font-family: Poppins, sans-serif;
-
-    background-color: #000;
-    color: #e0e0e0;
 }
 
 main {
@@ -19,51 +10,18 @@ main {
     grid-template-columns: repeat(12, 1fr);
 }
 
-/* Elements for header */
-
 header {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
 
-    background-color: #50a004;
+    background-color: #ccc;
     grid-column: 1 / 13;
     grid-row: 1;
     min-height: 60px;
 }
 
-#heading {
-    grid-column: 1 / 5;
-}
-
-#logo {
-    font-size: 40px;
-    text-align: center;
-    width: 240px;
-    height: 60px;
-}
-
-nav {
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: flex-end;
-
-    grid-column: 5 / 13;
-    text-align: center;
-}
-
-nav div {
-    background-color: #000;
-    color: #eee;
-    font-size: 24px;
-    margin: 4px;
-    width: 120px;
-}
-
-/* Other element styles */
-
 article {
-    background-color: #e0e0e0;
-    color: #000;
+    background-color: #aaa;
     grid-column: 5 / 13;
     grid-row: 2;
 }
@@ -94,21 +52,17 @@ form {
 }
 
 form div {
+    background-color: #000;
+    color: #fff;
     margin: 5px 20px;
     width: 440px;
 }
 
 form div label {
-    background-color: #e0e0e0;
-    color: #000;
     display: block;
-
-    border-radius: 10px 10px 0 0;
-    padding-left: 10px;
-    width: 170px;
 }
 
-form div input {
+form div input[type=text] {
     width: 98%;
 }
 
@@ -132,17 +86,46 @@ form div input {
 }
 
 aside {
-    background-color: #a0d064;
+    background-color: #666;
     grid-column: 1 / 5;
     grid-row: 2;
 }
 
 footer {
+    background-color: #888;
     grid-column: 1 / 13;
     grid-row: 3;
     min-height: 120px;
 }
 
-.copyrite {
+#heading {
+    background-color: #543;
+    grid-column: 1 / 5;
+}
+
+#logo {
+    background-color: #123;
+    color: #eee;
+    font-size: 40px;
     text-align: center;
+    width: 240px;
+    height: 60px;
+}
+
+nav {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+
+    background-color: #684;
+    grid-column: 5 / 13;
+    text-align: center;
+}
+
+nav div {
+    background-color: #000;
+    color: #fff;
+    font-size: 24px;
+    margin: 4px;
+    width: 120px;
 }

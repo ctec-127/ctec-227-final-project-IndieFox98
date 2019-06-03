@@ -30,34 +30,40 @@
 <body>
     <main>
         <?php require_once "inc/header.php"; ?>
-        <h1>You gotta register in order to log in!</h1>
-        <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
-            <div>
-                <label for="first">First Name</label>
-                <input id="first" name="first" type="text">
-            </div>
-            <div>
-                <label for="last">Last Name</label>
-                <input id="last" name="last" type="text">
-            </div>
-            <div>
-                <label for="alias">Username</label>
-                <input id="alias" name="alias" type="text">
-            </div>
-            <div>
-                <label for="email">Email</label>
-                <input id="email" name="email" type="email">
-            </div>
-            <div>
-                <label for="password">Password</label>
-                <input id="password" name="password" type="password">
-            </div>
-            <div>
-                <label for="confirm">Confirm Password</label>
-                <input id="confirm" type="password">
-            </div>
-            <input type="submit" value="Register!">
-        </form>
+        <article>
+            <h1>You gotta register in order to log in!</h1>
+            <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+                <div>
+                    <label for="first">First Name</label>
+                    <input id="first" name="first" type="text">
+                </div>
+                <div>
+                    <label for="last">Last Name</label>
+                    <input id="last" name="last" type="text">
+                </div>
+                <div>
+                    <label for="alias">Username</label>
+                    <input id="alias" name="alias" type="text">
+                </div>
+                <div>
+                    <label for="email">Email</label>
+                    <input id="email" name="email" type="email">
+                </div>
+                <div>
+                    <label for="password">Password</label>
+                    <input id="password" name="password" type="password">
+                </div>
+                <div>
+                    <label for="confirm">Confirm Password</label>
+                    <input id="confirm" type="password">
+                </div>
+                <input class="button" type="submit" value="REGISTER!">
+                <input class="button" type="reset" value="RESET">
+            </form>
+        </article>
+        <aside>
+        </aside>
+        <?php require_once "inc/footer.php"; ?>
     </main>
 </body>
 </html>

@@ -1,12 +1,12 @@
 <!-- Header include file -->
 
 <header>
-    <h1><a href="index.php">imgload</a></h1>
+    <div id="heading">
+        <div id="logo"><a href="index.php"><img src="img/imgload-logo.png"></a></div>
+    </div>
     <nav>
-        <ul>
-            <li><a href="about.php">About</a></li>
-            <li><a href="login.php">Log In</a></li>
-            <li><a href="register.php">Register</a></li>
-        </ul>
+        <div>about</div>
+        <div><a href="login.php">login</a></div>
+        <div><a href="register.php">register</a></div>
     </nav>
 </header>
