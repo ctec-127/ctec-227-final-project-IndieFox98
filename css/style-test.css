@@ -29,6 +29,7 @@ article {
 .gallery {
     display: flex;
     flex-flow: row wrap;
+    align-content: flex-start;
     min-height: 360px;
 }
 
@@ -86,9 +87,29 @@ form div input[type=text] {
 }
 
 aside {
+    display: flex;
+    flex-flow: row wrap;
+    align-content: flex-start;
+
     background-color: #666;
     grid-column: 1 / 5;
     grid-row: 2;
+}
+
+aside div {
+    background-color: #000;
+    color: #fff;
+    margin: 5px;
+    width: calc(50% - 10px);
+    height: 200px;
+}
+
+.profile {
+    background-color: #000;
+    color: #fff;
+    margin: 5px;
+    width: calc(100% - 10px);
+    height: 120px;
 }
 
 footer {

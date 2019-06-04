@@ -25,7 +25,7 @@ header {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
 
-    background-color: #50a004;
+    background-color: #40a004;
     grid-column: 1 / 13;
     grid-row: 1;
     min-height: 60px;
@@ -52,11 +52,25 @@ nav {
 }
 
 nav div {
-    background-color: #000;
-    color: #eee;
     font-size: 24px;
     margin: 4px;
     width: 120px;
+}
+
+.headerlink {
+    text-decoration: none;
+}
+
+.headerlink:link, .headerlink:visited {
+    color: #e0e0e0;
+}
+
+.headerlink:hover {
+    color: #a0d064;
+}
+
+.headerlink:active {
+    color: #e0e0e0;
 }
 
 /* Other element styles */
@@ -87,7 +101,7 @@ form {
     flex-flow: row wrap;
     justify-content: space-between;
 
-    background-color: #5a0;
+    background-color: #40a004;
     border-radius: 10px;
     margin: 5px;
     width: 480px;
@@ -145,4 +159,8 @@ footer {
 
 .copyrite {
     text-align: center;
+}
+
+textarea {
+    resize: none;
 }

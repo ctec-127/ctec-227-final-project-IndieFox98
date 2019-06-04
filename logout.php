@@ -1,7 +1,14 @@
-<!-- Home page -->
+<!-- Template page -->
 
 <?php
     session_start();
+
+    require_once "inc/new_mysqli.php";
+
+    if (isset($_SESSION['login'])) {
+        session_unset();
+        session_destroy();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -18,9 +25,10 @@
     <main>
         <?php require_once "inc/header.php"; ?>
         <article>
-            <h1>Welcome, <?= isset($_SESSION['fname']) && isset($_SESSION['lname']) ? $_SESSION['fname'] . ' ' . $_SESSION['lname'] : 'stranger'; ?>!</h1>
+            <h1>You have been logged out. Come back soon!</h1>
         </article>
         <aside>
+            <p>The quick brown fox jumped over the lazy dog.</p>
         </aside>
         <?php require_once "inc/footer.php"; ?>
     </main>
