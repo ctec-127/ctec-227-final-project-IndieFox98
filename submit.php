@@ -36,14 +36,17 @@
                     <label for="alt">Alt Text</label>
                     <input id="alt" name="alt" type="text">
                 </div>
+                <!--
                 <input class="button" type="submit" value="SUBMIT!">
                 <input class="button" type="reset" value="RESET">
+                -->
             </form>
             <?php } else { ?>
             <p>You don't exist. Go away!</p>
             <?php } ?>
         </article>
         <aside>
+            <?php require_once "inc/profile.php"; ?>
         </aside>
         <?php require_once "inc/footer.php"; ?>
     </main>

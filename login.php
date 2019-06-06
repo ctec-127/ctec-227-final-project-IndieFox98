@@ -7,7 +7,7 @@
 
     function login($db) {
         $email = $db->real_escape_string($_POST['email']);
-        $pword = $db->real_escape_string($_POST['password']);
+        $pword = hash('sha512', $_POST['password']);
 
         $sql = "SELECT * FROM user WHERE email = '" . $email . "' AND password = '" . $pword . "' LIMIT 1";
 
@@ -15,9 +15,11 @@
 
         if ($result->num_rows == 1) {
             $row = $result->fetch_assoc();
-            $_SESSION['fname'] = $row['first_name'];
-            $_SESSION['lname'] = $row['last_name'];
+            $_SESSION['id'] = $row['user_id'];
+            $_SESSION['first'] = $row['first_name'];
+            $_SESSION['last'] = $row['last_name'];
             $_SESSION['alias'] = $row['user_name'];
+            $_SESSION['propic'] = $row['profile_pic'];
             $_SESSION['login'] = 1;
             header("location: index.php");
         } else {

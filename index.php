@@ -18,9 +18,10 @@
     <main>
         <?php require_once "inc/header.php"; ?>
         <article>
-            <h1>Welcome, <?= isset($_SESSION['fname']) && isset($_SESSION['lname']) ? $_SESSION['fname'] . ' ' . $_SESSION['lname'] : 'stranger'; ?>!</h1>
+            <h1>Welcome, <?= isset($_SESSION['login']) ? $_SESSION['first'] . ' ' . $_SESSION['last'] : 'stranger'; ?>!</h1>
         </article>
         <aside>
+            <?php require_once "inc/profile.php"; ?>
         </aside>
         <?php require_once "inc/footer.php"; ?>
     </main>

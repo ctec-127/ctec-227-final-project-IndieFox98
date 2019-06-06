@@ -22,6 +22,7 @@
             <p>Imgload is a site dedicated to image gallery building. It has been started by some college-attending freeloader named Torin Tashima so he can become immortal in the web development workplace.</p>
         </article>
         <aside>
+            <?php require_once "inc/profile.php"; ?>
         </aside>
         <?php require_once "inc/footer.php"; ?>
     </main>

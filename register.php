@@ -26,14 +26,14 @@
 
         if ($error) {
             echo '<div>Error! Error! Run with terror!</div>';
-        }else if (!$confirm) {
+        } else if (!$confirm) {
             echo '<div>Yo, yo password cannot be confirmed, man.</div>';
         } else {
             $fname = $db->real_escape_string($_POST['first']);
             $lname = $db->real_escape_string($_POST['last']);
             $alias = $db->real_escape_string($_POST['alias']);
             $email = $db->real_escape_string($_POST['email']);
-            $pword = $db->real_escape_string($_POST['password']);
+            $pword = hash('sha512', $_POST['password']);
             $date = $db->real_escape_string(date("Y/m/d"));
 
             $sql = "INSERT INTO user (first_name, last_name, user_name, role, email, password, join_date)
