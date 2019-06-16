@@ -9,15 +9,19 @@
                         FROM image_reaction 
                         WHERE image_id = '" . $_POST['img_id'] . "' AND user_id = '" . $_SESSION['id'] . "' LIMIT 1";
 
-        $result = $db->query($sql_reaction);
+        $result_check = $db->query($sql_reaction);
 
-        if ($result->num_rows == 1) {
+        if ($result_check->num_rows == 1) {
             # Simply update database if reaction does exist
-            $sql_update = "UPDATE image_reaction 
-                            SET reaction_id = '" . $_POST['reaction_id'] . "' 
-                            WHERE image_id = '" . $_POST['img_id'] . "' AND user_id = '" . $_SESSION['id'] . "' LIMIT 1";
+            $row = $result_check->fetch_assoc();
 
-            $result = $db->query($sql_update);
+            if ($row['reaction_id'] != $_POST['reaction_id']) {
+                $sql_update = "UPDATE image_reaction 
+                                SET reaction_id = '" . $_POST['reaction_id'] . "' 
+                                WHERE image_id = '" . $_POST['img_id'] . "' AND user_id = '" . $_SESSION['id'] . "' LIMIT 1";
+
+                $result = $db->query($sql_update);
+            }
         } else {
             # Insert if reaction from user doesn't exist
             $sql_insert = "INSERT INTO image_reaction (image_id, reaction_id, user_id) 

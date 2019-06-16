@@ -127,7 +127,7 @@
             echo '</div>'; // End of modal-head div
             echo '<div class="modal-body">';
             echo '<p class="modal-description">' . $image['description'] . '</p>';
-            echo '<p class="modal-author">' . $image['user_name'] . '</p>';
+            echo '<p class="modal-author">Uploaded by ' . $image['user_name'] . ' on ' . $img_date->format('F jS, Y') . '</p>';
 
             # The old like system
             // echo '<p class="modal-faves"><i class="fa fa-thumbs-o-up"></i> ' . $image['image_likes'] . ' <i class="fa fa-thumbs-o-down"></i> ' . $image['image_dislikes'] . '</p>';
@@ -149,13 +149,13 @@
             // Do you like it?
             echo '<div class="reaction-card">';
             echo isset($_SESSION['login']) ? '<button class="button reaction" id="like_' . $image['image_id'] . '" title="Thank you for liking!"><i class="fa fa-thumbs-o-up"></i></button>' : '<i class="fa fa-thumbs-o-up"></i>';
-            echo '<span class="reaction-display">' . $image['image_likes'] . '</span>';
+            echo '<span class="reaction-display" id="number-likes_' . $image['image_id'] . '">' . $image['image_likes'] . '</span>';
             echo '</div>';
 
             // Or dislike it?
             echo '<div class="reaction-card">';
             echo isset($_SESSION['login']) ? '<button class="button reaction" id="dislike_' . $image['image_id'] . '" title="I\'m sorry to hear you don\'t like it."><i class="fa fa-thumbs-o-down"></i></button>' : '<i class="fa fa-thumbs-o-up"></i>';
-            echo '<span class="reaction-display">' . $image['image_dislikes'] . '</span>';
+            echo '<span class="reaction-display" id="number-dislikes_' . $image['image_id'] . '">' . $image['image_dislikes'] . '</span>';
             echo '</div>';
 
             echo '<h2>Comments</h2>';
@@ -167,7 +167,8 @@
             }
             echo '<div class="modal-comments">';
             foreach ($image['comments'] as $comment) {
-                echo '<p>' . $comment['comment_string'] . '<br>' . $comment['user_name'] . ' on ' . $comment['comment_date'] . '</p>';
+                $comment_date = new DateTime($comment['comment_date']);
+                echo '<p>' . $comment['comment_string'] . '<br>' . $comment['user_name'] . ' on ' . $comment_date->format('F jS, Y') . ' at ' . $comment_date->format('H:i:s') . '</p>';
             }
             // print_r($image['comments']);
             echo '</div>';

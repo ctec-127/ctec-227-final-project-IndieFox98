@@ -6,6 +6,9 @@ $(document).ready(function() {
         var img_id = split_id[1];
         var reaction = split_id[0];
 
+        // var likes = $("#number-likes_" + img_id).text();
+        // var dislikes = $("#number-dislikes_" + img_id).text();
+
         if (reaction === "like") {
             var reaction_id = '1';
         } else if (reaction === "dislike") {
@@ -23,9 +26,13 @@ $(document).ready(function() {
                 if (reaction_id === '1') {
                     $("#" + btn_id).html("<i class='fa fa-thumbs-up'></i>");
                     $("#dislike_" + img_id).html("<i class='fa fa-thumbs-o-down'></i>");
+                    // $("#number-likes_" + img_id).text(parseInt(likes) + 1);
+                    // $("#number-dislikes_" + img_id).text(parseInt(dislikes) - 1);
                 } else if (reaction_id === '2') {
                     $("#" + btn_id).html("<i class='fa fa-thumbs-down'></i>");
                     $("#like_" + img_id).html("<i class='fa fa-thumbs-o-up'></i>");
+                    // $("#number-dislikes_" + img_id).html(parseInt(dislikes) + 1);
+                    // $("#number-likes_" + img_id).html(parseInt(likes) - 1);
                 }
                 // console.log("Hooyah booyah!");
             },
