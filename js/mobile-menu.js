@@ -1,9 +1,12 @@
 function dropMenu() {
     var nav = document.getElementsByClassName("mobile-nav")[0];
+    var btn = document.getElementById("burger-btn");
 
-    if (nav.style.display === "block") {
-        nav.style.display = "none";
+    if (nav.style.height === "180px") {
+        nav.style.height = "0";
+        btn.className = "fa fa-bars";
     } else {
-        nav.style.display = "block";
+        nav.style.height = "180px";
+        btn.className = "fa fa-times";
     }
 }

@@ -22,24 +22,54 @@
         $title = $db->real_escape_string($_POST['title']);
         $description = $db->real_escape_string($_POST['description']);
         $alt = $db->real_escape_string($_POST['alt']);
+        $category = $db->real_escape_string($_POST['category']);
         $id = $db->real_escape_string($_SESSION['id']);
         $date = $db->real_escape_string(date("Y/m/d"));
 
-        $target_file = basename($_FILES['image']['name']); # Actual file name
+        $target_file = $_SESSION['id'] . '_' . basename($_FILES['image']['name']); # Actual file name
         $file_size = $_FILES['image']['size'];
 
         $file_ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+
+        // if (file_exists($upload_dir . '/' . $target_file)) {
+        //     $target_file = $_SESSION['id'] . '_' . $target_file;
+        // }
 
         if (($file_ext == 'png' || $file_ext == 'jpg' || $file_ext == 'jpeg' || $file_ext == 'gif') || empty($tmp_file)) {
             if (move_uploaded_file($tmp_file, $upload_dir . '/' . $target_file)) { # Check if the selected image has been moved to the destination folder
                 $msg = "Upload successful!";
                 $msg_class = "success";
 
-                # Add profile pic to database
-                $sql = "INSERT INTO image (file_name, file_size, title, description, alt_text, user_id, category_id, image_date)
-                        VALUES ('$target_file', '$file_size', '$title', '$description', '$alt', '$id', '1', '$date')";
+                # Add category to database if it doesn't exist
+                $sql_category = "SELECT * FROM category";
 
-                $result = $db->query($sql);
+                $result = $db->query($sql_category);
+
+                $empty = true;
+                while ($row = mysqli_fetch_assoc($result)) {
+                    if ($row['category_name'] == $category) {
+                        $empty = false;
+                    }
+                }
+
+                if ($empty) {
+                    $sql_addcat = "INSERT INTO category (category_name) 
+                                    VALUES ('$category')";
+                    
+                    $result = $db->query($sql_addcat);
+                }
+
+                # Add profile pic to database
+                $sql_category = "SELECT * FROM category WHERE category_name = '$category'";
+
+                $result = $db->query($sql_category);
+                $row = $result->fetch_assoc();
+                $category_id = $row['category_id'];
+
+                $sql_img = "INSERT INTO image (file_name, file_size, title, description, alt_text, user_id, category_id, image_date)
+                            VALUES ('$target_file', '$file_size', '$title', '$description', '$alt', '$id', '$category_id', '$date')";
+
+                $result = $db->query($sql_img);
             } else {
                 $err = $_FILES['image']['error'];
                 $msg = $upload_errors[$err];
@@ -49,18 +79,13 @@
             $msg = "Only png, jpg/jpeg, and gif files are allowed. This is an <strong>image</strong> uploader, genius.";
             $msg_class = "alert";
         }
-        
     }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <?php require_once "inc/head.html"?>
     <title>imgload - Time to submit!</title>
 </head>
 <body>
@@ -88,12 +113,16 @@
                     <label for="alt">Alt Text</label>
                     <input id="alt" name="alt" type="text">
                 </div>
+                <div>
+                    <label for="category">Category</label>
+                    <input id="category" name="category" type="text">
+                </div>
                 <input class="button" type="submit" value="SUBMIT!">
                 <input class="button" type="reset" value="RESET">
             </form>
-            <?php } else { ?>
-            <p>You don't exist. Go away!</p>
-            <?php } ?>
+            <?php } else {
+                header("location: index.php");
+            } ?>
         </article>
         <aside>
             <?php require_once "inc/profile.php"; ?>

@@ -25,7 +25,7 @@
         }
 
         if ($error) {
-            echo '<div>Error! Error! Run with terror!</div>';
+            echo '<div>Error! Error! Run with terror! A field is missing!</div>';
         } else if (!$confirm) {
             echo '<div>Yo, yo password cannot be confirmed, man.</div>';
         } else {
@@ -36,7 +36,7 @@
             $pword = hash('sha512', $_POST['password']);
             $date = $db->real_escape_string(date("Y/m/d"));
 
-            $sql = "INSERT INTO user (first_name, last_name, user_name, role, email, password, join_date)
+            $sql = "INSERT INTO user (first_name, last_name, user_name, role, email, password, join_date) 
                     VALUES ('$fname', '$lname', '$alias', 'member', '$email', '$pword', '$date')";
 
             $result = $db->query($sql);
@@ -54,11 +54,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <?php require_once "inc/head.html"?>
     <title>imgload - Let's register!</title>
 </head>
 <body>
