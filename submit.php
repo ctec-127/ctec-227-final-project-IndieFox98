@@ -18,66 +18,126 @@
     ];
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $tmp_file = $_FILES['image']['tmp_name'];  # Temporary image file name
-        $title = $db->real_escape_string($_POST['title']);
-        $description = $db->real_escape_string($_POST['description']);
-        $alt = $db->real_escape_string($_POST['alt']);
-        $category = $db->real_escape_string($_POST['category']);
-        $id = $db->real_escape_string($_SESSION['id']);
-        $date = $db->real_escape_string(date("Y/m/d"));
+        $required = ['title', 'description', 'category'];
 
-        $target_file = $_SESSION['id'] . '_' . basename($_FILES['image']['name']); # Actual file name
-        $file_size = $_FILES['image']['size'];
+        $error = false;
+        foreach ($required as $field) {
+            if (empty($_POST[$field])) {
+                $error = true;
+            }
+        }
 
-        $file_ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+        if ($error) {
+            echo '<div>Error! Error! Run with terror! A field is missing!</div>';
+        } else {
+            $tmp_file = $_FILES['image']['tmp_name'];  # Temporary image file name
+            $title = $db->real_escape_string($_POST['title']);
+            $description = $db->real_escape_string($_POST['description']);
+            $alt = $db->real_escape_string($_POST['alt']);
+            $category = $db->real_escape_string($_POST['category']);
+            $tags = $db->real_escape_string($_POST['tags']);
+            $id = $db->real_escape_string($_SESSION['id']);
+            $date = $db->real_escape_string(date("Y/m/d"));
 
-        // if (file_exists($upload_dir . '/' . $target_file)) {
-        //     $target_file = $_SESSION['id'] . '_' . $target_file;
-        // }
+            $tags = str_replace(' ', '', $tags);
+            $tag_array = explode(',', $tags);
 
-        if (($file_ext == 'png' || $file_ext == 'jpg' || $file_ext == 'jpeg' || $file_ext == 'gif') || empty($tmp_file)) {
-            if (move_uploaded_file($tmp_file, $upload_dir . '/' . $target_file)) { # Check if the selected image has been moved to the destination folder
-                $msg = "Upload successful!";
-                $msg_class = "success";
+            $target_file = $_SESSION['id'] . '_' . basename($_FILES['image']['name']); # Actual file name
+            $file_size = $_FILES['image']['size'];
 
-                # Add category to database if it doesn't exist
-                $sql_category = "SELECT * FROM category";
+            $file_ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
 
-                $result = $db->query($sql_category);
+            // if (file_exists($upload_dir . '/' . $target_file)) {
+            //     $target_file = $_SESSION['id'] . '_' . $target_file;
+            // }
 
-                $empty = true;
-                while ($row = mysqli_fetch_assoc($result)) {
-                    if ($row['category_name'] == $category) {
-                        $empty = false;
+            if (($file_ext == 'png' || $file_ext == 'jpg' || $file_ext == 'jpeg' || $file_ext == 'gif') || empty($tmp_file)) {
+                if (move_uploaded_file($tmp_file, $upload_dir . '/' . $target_file)) { # Check if the selected image has been moved to the destination folder
+                    $msg = "Upload successful!";
+                    $msg_class = "success";
+
+                    # Add category to database if it doesn't exist
+                    $sql_category = "SELECT * FROM category";
+
+                    $result = $db->query($sql_category);
+
+                    $empty = true;
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        if ($row['category_name'] == $category) {
+                            $empty = false;
+                        }
                     }
+
+                    if ($empty) {
+                        $sql_addcat = "INSERT INTO category (category_name) 
+                                        VALUES ('$category')";
+                        
+                        $result = $db->query($sql_addcat);
+                    }
+
+                    # Add profile pic to database
+                    $sql_category = "SELECT * FROM category WHERE category_name = '$category'";
+
+                    $result = $db->query($sql_category);
+                    $row = $result->fetch_assoc();
+                    $category_id = $row['category_id'];
+
+                    $sql_img = "INSERT INTO image (file_name, file_size, title, description, alt_text, user_id, category_id, image_date)
+                                VALUES ('$target_file', '$file_size', '$title', '$description', '$alt', '$id', '$category_id', '$date')";
+
+                    $result = $db->query($sql_img);
+
+                    # Now add image tags
+                    foreach ($tag_array as $tag) {
+                        # Add tag to database if it doesn't exist
+                        $sql_tag = "SELECT * FROM tag";
+
+                        $result = $db->query($sql_tag);
+
+                        $empty = true;
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            if ($row['tag_name'] == $tag) {
+                                $empty = false;
+                            }
+                        }
+
+                        if ($empty) {
+                            $sql_addtag = "INSERT INTO tag (tag_name) 
+                                        VALUES ('$tag')";
+
+                            $result = $db->query($sql_addtag);
+                        }
+
+                        $sql_latestimg = "SELECT image_id 
+                                        FROM image 
+                                        ORDER BY image_id DESC LIMIT 1";
+
+                        $result = $db->query($sql_latestimg);
+                        $row = $result->fetch_assoc();
+                        $image_id = $row['image_id'];
+
+                        $sql_latesttag = "SELECT tag_id 
+                                        FROM tag 
+                                        ORDER BY tag_id DESC LIMIT 1";
+
+                        $result = $db->query($sql_latesttag);
+                        $row = $result->fetch_assoc();
+                        $tag_id = $row['tag_id'];
+
+                        $sql_addimgtag = "INSERT INTO image_tag (image_id, tag_id) 
+                                            VALUES ('$image_id', '$tag_id')";
+
+                        $result = $db->query($sql_addimgtag);
+                    }
+                } else {
+                    $err = $_FILES['image']['error'];
+                    $msg = $upload_errors[$err];
+                    $msg_class = "alert";
                 }
-
-                if ($empty) {
-                    $sql_addcat = "INSERT INTO category (category_name) 
-                                    VALUES ('$category')";
-                    
-                    $result = $db->query($sql_addcat);
-                }
-
-                # Add profile pic to database
-                $sql_category = "SELECT * FROM category WHERE category_name = '$category'";
-
-                $result = $db->query($sql_category);
-                $row = $result->fetch_assoc();
-                $category_id = $row['category_id'];
-
-                $sql_img = "INSERT INTO image (file_name, file_size, title, description, alt_text, user_id, category_id, image_date)
-                            VALUES ('$target_file', '$file_size', '$title', '$description', '$alt', '$id', '$category_id', '$date')";
-
-                $result = $db->query($sql_img);
             } else {
-                $err = $_FILES['image']['error'];
-                $msg = $upload_errors[$err];
+                $msg = "Only png, jpg/jpeg, and gif files are allowed. This is an <strong>image</strong> uploader, genius.";
                 $msg_class = "alert";
             }
-        } else {
-            $msg = "Only png, jpg/jpeg, and gif files are allowed. This is an <strong>image</strong> uploader, genius.";
-            $msg_class = "alert";
         }
     }
 ?>
@@ -99,26 +159,37 @@
                 <div>
                     <input type="hidden" name="MAX_FILE_SIZE" value="2097152">
                     <label for="image">Image</label>
-                    <input id="image" name="image" type="file" accept="image/jpeg, image/png, image/gif">
+                    <input id="image" name="image" type="file" accept="image/jpeg, image/png, image/gif" value=<? isset($_SESSION['image']) ? $_SESSION['image'] : ''; ?>>
                 </div>
                 <div>
                     <label for="title">Title</label>
-                    <input id="title" name="title" type="text">
+                    <input id="title" name="title" type="text" value="<?= isset($_POST['title']) ? $_POST['title'] : ''; ?>">
                 </div>
                 <div>
                     <label for="description">Description</label>
-                    <textarea id="description" name="description" rows="9" cols="53"></textarea>
+                    <textarea id="description" name="description" rows="9" cols="53"><?= isset($_POST['description']) ? $_POST['description'] : ''; ?></textarea>
                 </div>
                 <div>
                     <label for="alt">Alt Text</label>
-                    <input id="alt" name="alt" type="text">
+                    <input id="alt" name="alt" type="text" value="<?= isset($_POST['alt']) ? $_POST['alt'] : ''; ?>">
                 </div>
                 <div>
                     <label for="category">Category</label>
-                    <input id="category" name="category" type="text">
+                    <!-- <input id="category" name="category" type="text" -->
+                    <select id="category" name="category">
+                        <option value="">Please select...</option>
+                        <option value="cgi" <?= isset($_POST['category']) && $_POST['category'] == 'cgi' ? 'selected' : ''; ?>>CGI</option>
+                        <option value="comic" <?= isset($_POST['category']) && $_POST['category'] == 'comic' ? 'selected' : ''; ?>>Cartoons & Comics</option>
+                        <option value="photo" <?= isset($_POST['category']) && $_POST['category'] == 'photo' ? 'selected' : ''; ?>>Photography</option>
+                        <option value="humor" <?= isset($_POST['category']) && $_POST['category'] == 'humor' ? 'selected' : ''; ?>>Humor</option>
+                    </select>
                 </div>
-                <input class="button" type="submit" value="SUBMIT!">
-                <input class="button" type="reset" value="RESET">
+                <div>
+                    <label for="tags">Tags (separate by commas)</label>
+                    <input id="tags" name="tags" type="text" value="<?= isset($_POST['tags']) ? $_POST['tags'] : ''; ?>">
+                </div>
+                <input class="form-button" type="submit" value="SUBMIT!">
+                <input class="form-button" type="reset" value="RESET">
             </form>
             <?php } else {
                 header("location: index.php");

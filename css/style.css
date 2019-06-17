@@ -134,6 +134,7 @@ article {
     grid-row: 2;
 
     /* min-height: 800px; */
+    min-height: calc(100vh - 180px);
 }
 
 /* Gallery styles */
@@ -304,7 +305,7 @@ article {
 
 .modal-body {
     width: 300px;
-    height: 600px;
+    height: 580px;
     padding: 10px;
 }
 
@@ -316,6 +317,86 @@ article {
     margin: 0;
 }
 
+.reaction-card {
+    display: flex;
+    flex-flow: row nowrap;
+    position: relative;
+
+    margin: 5px 0;
+    width: 100px;
+}
+
+.reaction {
+    border: none;
+    border-radius: 10px 0 0 10px;
+    color: #e0e0e0;
+
+    font-size: 14px;
+    padding: 5px;
+
+    text-align: center;
+    width: 40px;
+
+    -webkit-transition-duration: 0.3s;
+    -moz-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+}
+
+.reaction:hover {
+    cursor: pointer;
+}
+
+.reaction-display {
+    background-color: #c6c6c6;
+    border-radius: 0 10px 10px 0;
+
+    font-size: 14px;
+    padding: 5px 10px;
+
+    text-align: right;
+    width: 60px;
+}
+
+.like {
+    background-color: #248004;
+}
+
+.like:hover {
+    background-color: #32a00c;
+}
+
+.dislike {
+    background-color: #c66404;
+}
+
+.dislike:hover {
+    background-color: #dc781e;
+}
+
+.modal-tags {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.modal-tag {
+    background-color: #248004;
+    border-radius: 10px;
+    color: #e0e0e0;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    padding: 5px 10px;
+    text-decoration: none;
+
+    -webkit-transition-duration: 0.3s;
+    -moz-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+}
+
+.modal-tag:hover {
+    background-color: #32a00c;
+    cursor: pointer;
+}
+
 /* Form styles */
 
 form {
@@ -323,9 +404,10 @@ form {
     flex-flow: row wrap;
     justify-content: space-between;
 
-    background-color: #248004;
+    background-color: #c6c6c6;
     border-radius: 10px;
     margin: 5px;
+    padding: 10px 0;
     width: 480px;
 }
 
@@ -334,28 +416,159 @@ form div {
     width: 440px;
 }
 
+form div.message {
+    background-color: #248004;
+    border-radius: 10px;
+    color: #e0e0e0;
+    padding: 5px;
+}
+
+form div.message-hidden {
+    display: hidden;
+}
+
+/*** For the missing fields ***/
+form div .missing {
+    background-image: linear-gradient(#e0e0e0, #e0d0d0);
+    box-shadow: 3px 2px #c62004;
+}
+
+form div .pwd-area {
+    display: flex;
+    flex-flow: row nowrap;
+    position: relative;
+
+    margin: 0;
+}
+
 form div label {
-    background-color: #e0e0e0;
     color: #000;
     display: block;
-
-    border-radius: 10px 10px 0 0;
-    padding-left: 10px;
-    width: 170px;
 }
 
-form div input {
-    width: 98%;
+form div input[type=text], form div input[type=password], form div input[type=email], form div input[type=date] {
+    font-family: Poppins, sans-serif;
+    font-size: 14px;
+
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 10px;
+    
+    padding: 5px;
+
+    -webkit-transition-duration: 0.3s;
+    -moz-transition-duration: 0.3s;
+    transition-duration: 0.3s;
 }
 
-.button {
+form div input[type=text], form div input[type=email], form div input[type=date] {
+    width: 430px;
+    border-radius: 10px;
+}
+
+form div .pwd-area input[type=password] {
+    width: 430px;
+    border-radius: 10px;
+}
+
+form div .pwd-area .toggle-pwd {
+    background-color: #b4b4b4;
+    color: #000;
+    position: absolute;
+
+    border-radius: 0 10px 10px 0;
+    font-size: 14px;
+    text-align: center;
+
+    padding: 5px;
+    right: 0;
+    width: 40px;
+
+    -webkit-transition-duration: 0.3s;
+    -moz-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+}
+
+form div .pwd-area .toggle-pwd:hover {
+    background-color: #c0c0c0;
+    cursor: pointer;
+}
+
+form div input:hover, form div textarea:hover, form div select:hover {
+    background-image: linear-gradient(#e0e0e0, #d6e0d6);
+}
+
+input[type=text]:focus, input[type=email]:focus, input[type=date]:focus, input[type=password]:focus, textarea:focus, select:focus {
+    background-image: none;
+    box-shadow: 3px 2px #808080;
+}
+
+form div input[type=file] {
+    font-family: Poppins, sans-serif;
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+form div input[type=file] + form div label {
+    background-color: #c66404;
+    color: #e0e0e0;
+    display: inline-block;
+
+    cursor: pointer;
+}
+
+form div input[type=file]:focus + label,
+form div input[type=file] + label:hover {
+    background-color: #c66404;
+}
+
+form div select {
+    font-family: Poppins, sans-serif;
+    font-size: 14px;
+
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 10px;
+    
+    padding: 5px;
+    width: 440px;
+
+    -webkit-transition-duration: 0.3s;
+    -moz-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+}
+
+form div textarea {
+    font-family: Poppins, sans-serif;
+    font-size: 14px;
+
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 10px;
+    
+    padding: 5px;
+    height: 140px;
+    width: 430px;
+
+    resize: none;
+
+    -webkit-transition-duration: 0.3s;
+    -moz-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+}
+
+.form-button {
     background-color: #c66404;
     border: none;
     border-radius: 10px;
     color: #e0e0e0;
     font-family: Poppins, sans-serif;
     font-size: 16px;
-    margin: 5px 20px;
+    margin: 20px;
     padding: 5px;
     width: 110px;
 
@@ -364,9 +577,8 @@ form div input {
     transition-duration: 0.3s;
 }
 
-.button:hover {
-    background-color: #e0e0e0;
-    color: #000;
+.form-button:hover {
+    background-color: #dc781e;
     cursor: pointer;
 }
 
@@ -415,12 +627,6 @@ footer {
 
 .copyrite {
     text-align: center;
-}
-
-/* Et cetera styles */
-
-textarea {
-    resize: none;
 }
 
 /* Media queries */

@@ -76,22 +76,31 @@
             <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
                 <div>
                     <label for="old">Old Password</label>
-                    <input id="old" name="old" type="password">
+                    <div class="pwd-area">
+                        <input id="old" name="old" class="pwd-field" type="password">
+                        <span id="tgl-old" class="toggle-pwd" onclick="togglePassword('old')"><i class="fa fa-eye"></i></span>
+                    </div>
                 </div>
                 <div>
                     <label for="new">New Password</label>
-                    <input id="new" name="new" type="password">
+                    <div class="pwd-area">
+                        <input id="new" name="new" class="pwd-field" type="password">
+                        <span id="tgl-new" class="toggle-pwd" onclick="togglePassword('new')"><i class="fa fa-eye"></i></span>
+                    </div>
                 </div>
                 <div>
                     <label for="confirm">Confirm Password</label>
-                    <input id="confirm" name="confirm" type="password">
+                    <div class="pwd-area">
+                        <input id="confirm" name="confirm" class="pwd-field" type="password">
+                        <span id="tgl-confirm" class="toggle-pwd" onclick="togglePassword('confirm')"><i class="fa fa-eye"></i></span>
+                    </div>
                 </div>
-                <input class="button" type="submit" value="CHANGE!">
-                <input class="button" type="reset" value="RESET">
+                <input class="form-button" type="submit" value="CHANGE!">
+                <input class="form-button" type="reset" value="RESET">
             </form>
-            <?php } else { ?>
-            <p>You don't exist. Go away!</p>
-            <?php } ?>
+            <?php } else {
+                header("location: index.php");
+            } ?>
         </article>
         <aside>
             <?php require_once "inc/profile.php"; ?>

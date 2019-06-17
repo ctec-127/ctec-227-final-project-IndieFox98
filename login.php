@@ -40,15 +40,17 @@
         }
 
         if ($error) {
-            echo '<div>Ay caramba! A blank field!</div>';
+            // echo '<div>Ay caramba! A blank field!</div>';
+            $msg = 'Please enter your credentials.';
         } else {
             $attempt = login($db);
 
             if ($attempt) {
-                echo '<div>You are now logged in. Welcome aboard.</div>';
+                // echo '<div>You are now logged in. Welcome aboard.</div>';
                 $success = true;
             } else {
-                echo '<div>Incompatible login information. Try again, maggot.</div>';
+                // echo '<div>Incompatible login information. Try again, maggot.</div>';
+                $msg = 'Incorrect email or password. Try again.';
             }
         }
     }
@@ -66,21 +68,28 @@
         <article>
             <?php if (isset($_SESSION['login'])) {
                 header("location: index.php");
-            } else { ?>
+            } else {
+                if ($success) { ?>
+            <h1>Thank you so much for logging in!</h1>
+            <?php } else { ?>
             <h1>You gotta log in if you wanna load images!</h1>
             <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+                <div class="message<?= isset($msg) ? '' : '-hidden'; ?>"><?= isset($msg) ? $msg : ''; ?></div>
                 <div>
-                    <label for="email">Email</label>
-                    <input id="email" name="email" type="email">
+                    <label for="email" title="This field is required.">Email *</label>
+                    <input id="email" name="email" <?= isset($_POST['email']) && empty($_POST['email']) ? 'class="missing"' : ''; ?> type="email" onfocus="this.className = ''" value="<?= isset($_POST['email']) ? $_POST['email'] : ''; ?>">
                 </div>
                 <div>
-                    <label for="password">Password</label>
-                    <input id="password" name="password" type="password">
+                    <label for="password" title="This field is required.">Password *</label>
+                    <div class="pwd-area">
+                        <input id="password" name="password" <?= isset($_POST['password']) && empty($_POST['password']) ? 'class="missing"' : ''; ?> type="password" onfocus="this.className = ''" value="<?= isset($_POST['password']) ? $_POST['password'] : ''; ?>">
+                        <span id="tgl-password" class="toggle-pwd" onclick="togglePassword('password')"><i class="fa fa-eye"></i></span>
+                    </div>
                 </div>
-                <input class="button" type="submit" value="LOG IN!">
-                <input class="button" type="reset" value="RESET">
+                <input class="form-button" type="submit" value="LOG IN!">
+                <input class="form-button" type="reset" value="RESET">
             </form>
-            <?php } ?>
+            <?php }} ?>
         </article>
         <aside>
         </aside>
@@ -88,3 +97,4 @@
     </main>
 </body>
 </html>
+<script src="js/show-password.js"></script>

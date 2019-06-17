@@ -82,24 +82,24 @@
             <h1>You mean to tell me you aren't who I think you are???</h1>
             <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" enctype="multipart/form-data">
                 <div>
-                    <label for="first">First Name</label>
-                    <input id="first" name="first" type="text" value="<?= isset($_SESSION['first']) ? $_SESSION['first'] : ''; ?>">
+                    <label for="first" title="This field is required.">First Name *</label>
+                    <input id="first" name="first" <?= isset($_POST['first']) && empty($_POST['first']) ? 'class="missing"' : ''; ?> type="text" onfocus="this.className = ''" value="<?= isset($_POST['first']) ? $_POST['first'] : ''; ?>">
                 </div>
                 <div>
-                    <label for="last">Last Name</label>
-                    <input id="last" name="last" type="text" value="<?= isset($_SESSION['last']) ? $_SESSION['last'] : ''; ?>">
+                    <label for="last" title="This field is required.">Last Name *</label>
+                    <input id="last" name="last" <?= isset($_POST['last']) && empty($_POST['last']) ? 'class="missing"' : ''; ?> type="text" onfocus="this.className = ''" value="<?= isset($_POST['last']) ? $_POST['last'] : ''; ?>">
                 </div>
                 <div>
-                    <label for="alias">Username</label>
-                    <input id="alias" name="alias" type="text" value="<?= isset($_SESSION['alias']) ? $_SESSION['alias'] : ''; ?>">
+                    <label for="alias" title="This field is required.">Username *</label>
+                    <input id="alias" name="alias" <?= isset($_POST['alias']) && empty($_POST['alias']) ? 'class="missing"' : ''; ?> type="text" onfocus="this.className = ''" value="<?= isset($_POST['alias']) ? $_POST['alias'] : ''; ?>">
                 </div>
                 <div>
                     <input type="hidden" name="MAX_FILE_SIZE" value="2097152">
                     <label for="propic">Profile Picture</label>
-                    <input id="propic" name="propic" type="file" accept="image/jpeg, image/png, image/gif">
+                    <input id="propic" name="propic" type="file" accept="image/jpeg, image/png, image/gif" value=<? isset($_SESSION['propic']) ? $_SESSION['propic'] : ''; ?>>
                 </div>
-                <input class="button" type="submit" value="CHANGE!">
-                <input class="button" type="reset" value="RESET">
+                <input class="form-button" type="submit" value="CHANGE!">
+                <input class="form-button" type="reset" value="RESET">
             </form>
             <?php } else {
                 header("location: index.php");

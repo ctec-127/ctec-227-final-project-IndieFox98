@@ -3,6 +3,7 @@ CREATE TABLE user (
     first_name varchar(30),
     last_name varchar(30),
     user_name varchar(40),
+    birth_date date,
     role varchar(20),
     email varchar(60),
     password varchar(128),
