@@ -18,7 +18,7 @@
     ];
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $required = ['title', 'description', 'category'];
+        $required = ['title', 'description', 'alt', 'category', 'tags'];
 
         $error = false;
         foreach ($required as $field) {
@@ -28,7 +28,7 @@
         }
 
         if ($error) {
-            echo '<div>Error! Error! Run with terror! A field is missing!</div>';
+            $msg = 'Please fill in the missing fields.';
         } else {
             $tmp_file = $_FILES['image']['tmp_name'];  # Temporary image file name
             $title = $db->real_escape_string($_POST['title']);
@@ -54,7 +54,7 @@
             if (($file_ext == 'png' || $file_ext == 'jpg' || $file_ext == 'jpeg' || $file_ext == 'gif') || empty($tmp_file)) {
                 if (move_uploaded_file($tmp_file, $upload_dir . '/' . $target_file)) { # Check if the selected image has been moved to the destination folder
                     $msg = "Upload successful!";
-                    $msg_class = "success";
+                    // $msg_class = "success";
 
                     # Add category to database if it doesn't exist
                     $sql_category = "SELECT * FROM category";
@@ -116,11 +116,11 @@
                         $row = $result->fetch_assoc();
                         $image_id = $row['image_id'];
 
-                        $sql_latesttag = "SELECT tag_id 
+                        $sql_selecttag = "SELECT tag_id 
                                         FROM tag 
-                                        ORDER BY tag_id DESC LIMIT 1";
+                                        WHERE tag_name = '$tag'";
 
-                        $result = $db->query($sql_latesttag);
+                        $result = $db->query($sql_selecttag);
                         $row = $result->fetch_assoc();
                         $tag_id = $row['tag_id'];
 
@@ -132,11 +132,11 @@
                 } else {
                     $err = $_FILES['image']['error'];
                     $msg = $upload_errors[$err];
-                    $msg_class = "alert";
+                    // $msg_class = "alert";
                 }
             } else {
                 $msg = "Only png, jpg/jpeg, and gif files are allowed. This is an <strong>image</strong> uploader, genius.";
-                $msg_class = "alert";
+                // $msg_class = "alert";
             }
         }
     }
@@ -149,34 +149,34 @@
     <title>imgload - Time to submit!</title>
 </head>
 <body>
-    <?php if (!empty($msg)) {echo "<div>{$msg}</div>";} ?>
     <main>
         <?php require_once "inc/header.php"; ?>
         <article>
             <?php if (isset($_SESSION['login'])) { ?>
             <h1>Get ready to submit!</h1>
             <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" enctype="multipart/form-data">
+                <div class="message<?= isset($msg) ? '' : '-hidden'; ?>"><?= isset($msg) ? $msg : ''; ?></div>
                 <div>
                     <input type="hidden" name="MAX_FILE_SIZE" value="2097152">
-                    <label for="image">Image</label>
-                    <input id="image" name="image" type="file" accept="image/jpeg, image/png, image/gif" value=<? isset($_SESSION['image']) ? $_SESSION['image'] : ''; ?>>
+                    <label for="image">Image *</label>
+                    <input id="image" name="image" <?= $_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_FILES['image']['error']) ? 'class="missing"' : ''; ?> type="file" onfocus="this.className = ''" accept="image/jpeg, image/png, image/gif">
                 </div>
                 <div>
-                    <label for="title">Title</label>
-                    <input id="title" name="title" type="text" value="<?= isset($_POST['title']) ? $_POST['title'] : ''; ?>">
+                    <label for="title">Title *</label>
+                    <input id="title" name="title" <?= isset($_POST['title']) && empty($_POST['title']) ? 'class="missing"' : ''; ?> type="text" onfocus="this.className = ''" value="<?= isset($_POST['title']) ? $_POST['title'] : ''; ?>">
                 </div>
                 <div>
-                    <label for="description">Description</label>
-                    <textarea id="description" name="description" rows="9" cols="53"><?= isset($_POST['description']) ? $_POST['description'] : ''; ?></textarea>
+                    <label for="description">Description *</label>
+                    <textarea id="description" name="description" <?= isset($_POST['description']) && empty($_POST['description']) ? 'class="missing"' : ''; ?> onfocus="this.className = ''" rows="9" cols="53"><?= isset($_POST['description']) ? $_POST['description'] : ''; ?></textarea>
                 </div>
                 <div>
-                    <label for="alt">Alt Text</label>
-                    <input id="alt" name="alt" type="text" value="<?= isset($_POST['alt']) ? $_POST['alt'] : ''; ?>">
+                    <label for="alt">Alt Text *</label>
+                    <input id="alt" name="alt" <?= isset($_POST['alt']) && empty($_POST['alt']) ? 'class="missing"' : ''; ?> type="text" onfocus="this.className = ''" value="<?= isset($_POST['alt']) ? $_POST['alt'] : ''; ?>">
                 </div>
                 <div>
-                    <label for="category">Category</label>
+                    <label for="category">Category *</label>
                     <!-- <input id="category" name="category" type="text" -->
-                    <select id="category" name="category">
+                    <select id="category" name="category" <?= isset($_POST['category']) && empty($_POST['category']) ? 'class="missing"' : ''; ?> onfocus="this.className = ''">
                         <option value="">Please select...</option>
                         <option value="cgi" <?= isset($_POST['category']) && $_POST['category'] == 'cgi' ? 'selected' : ''; ?>>CGI</option>
                         <option value="comic" <?= isset($_POST['category']) && $_POST['category'] == 'comic' ? 'selected' : ''; ?>>Cartoons & Comics</option>
@@ -185,8 +185,8 @@
                     </select>
                 </div>
                 <div>
-                    <label for="tags">Tags (separate by commas)</label>
-                    <input id="tags" name="tags" type="text" value="<?= isset($_POST['tags']) ? $_POST['tags'] : ''; ?>">
+                    <label for="tags">Tags * (separate by commas)</label>
+                    <input id="tags" name="tags" <?= isset($_POST['tags']) && empty($_POST['tags']) ? 'class="missing"' : ''; ?> type="text" onfocus="this.className = ''" value="<?= isset($_POST['tags']) ? $_POST['tags'] : ''; ?>">
                 </div>
                 <input class="form-button" type="submit" value="SUBMIT!">
                 <input class="form-button" type="reset" value="RESET">
@@ -202,3 +202,4 @@
     </main>
 </body>
 </html>
+<script src="js/sticky-sidebar.js"></script>

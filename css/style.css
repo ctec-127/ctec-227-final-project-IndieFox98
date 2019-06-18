@@ -170,7 +170,7 @@ article {
 .card-img {
     width: 100%;
     height: 300px;
-    object-fit: scale-down;
+    object-fit: cover;
     color: #e0e0e0;
 
     -webkit-transition-duration: 0.3s;
@@ -250,6 +250,7 @@ article {
 
 .modal-content {
     display: flex;
+    flex-flow: row wrap;
     position: relative;
 
     width: 960px;
@@ -307,6 +308,7 @@ article {
     width: 300px;
     height: 580px;
     padding: 10px;
+    overflow: hidden;
 }
 
 .modal-body h2 {
@@ -446,29 +448,20 @@ form div label {
     display: block;
 }
 
-form div input[type=text], form div input[type=password], form div input[type=email], form div input[type=date] {
+form div input[type=text], form div input[type=password], form div input[type=email], form div input[type=date], form div input[type=file] {
     font-family: Poppins, sans-serif;
     font-size: 14px;
 
     background-color: #e0e0e0;
     border: none;
     border-radius: 10px;
+    width: 430px;
     
     padding: 5px;
 
     -webkit-transition-duration: 0.3s;
     -moz-transition-duration: 0.3s;
     transition-duration: 0.3s;
-}
-
-form div input[type=text], form div input[type=email], form div input[type=date] {
-    width: 430px;
-    border-radius: 10px;
-}
-
-form div .pwd-area input[type=password] {
-    width: 430px;
-    border-radius: 10px;
 }
 
 form div .pwd-area .toggle-pwd {
@@ -501,29 +494,6 @@ form div input:hover, form div textarea:hover, form div select:hover {
 input[type=text]:focus, input[type=email]:focus, input[type=date]:focus, input[type=password]:focus, textarea:focus, select:focus {
     background-image: none;
     box-shadow: 3px 2px #808080;
-}
-
-form div input[type=file] {
-    font-family: Poppins, sans-serif;
-    width: 0.1px;
-    height: 0.1px;
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    z-index: -1;
-}
-
-form div input[type=file] + form div label {
-    background-color: #c66404;
-    color: #e0e0e0;
-    display: inline-block;
-
-    cursor: pointer;
-}
-
-form div input[type=file]:focus + label,
-form div input[type=file] + label:hover {
-    background-color: #c66404;
 }
 
 form div select {
@@ -588,6 +558,10 @@ aside {
     display: flex;
     flex-flow: row wrap;
     align-content: flex-start;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 60px;
+    max-height: calc(100vh - 60px);
 
     background-color: #a0d064;
     grid-column: 1 / 5;
@@ -615,6 +589,22 @@ aside div {
     width: 120px;
     height: 120px;
     object-fit: cover;
+}
+
+.profile-link {
+    text-decoration: none;
+}
+
+.profile-link:link, .profile-link:visited {
+    color: #e0e0e0;
+}
+
+.profile-link:hover {
+    color: #a0d064;
+}
+
+.profile-link:active {
+    color: #e0e0e0;
 }
 
 /* Styles for footer */
@@ -667,5 +657,170 @@ footer {
 @media (max-width: 550px) {
     .card {
         width: calc(100% - 10px);
+    }
+}
+
+/* Media queries for modal */
+
+@media (max-width: 959px) {
+    /* Modal styles */
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        height: 100%;
+        z-index: 999;
+
+        background-color: rgba(0, 0, 0, 61.8%);
+    }
+
+    .modal-content {
+        display: flex;
+        flex-flow: row wrap;
+        position: relative;
+
+        width: 640px;
+        height: 960px;
+        margin: auto;
+
+        background-color: #000;
+        color: #e0e0e0;
+    }
+
+    .modal-img {
+        width: 640px;
+        height: 640px;
+        object-fit: scale-down;
+    }
+
+    .modal-aside {
+        width: 640px;
+        height: 320px;
+    }
+
+    .modal-head, .modal-body {
+        background-color: #e0e0e0;
+        color: #000;
+    }
+
+    .modal-head {
+        display: flex;
+        width: 640px;
+        height: 40px;
+    }
+
+    .modal-title {
+        margin: auto 10px;
+        width: 600px;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .modal-close {
+        font-size: 24px;
+        text-align: center;
+
+        margin: auto 0;
+        width: 40px;
+    }
+
+    .modal-close:hover {
+        cursor: pointer;
+    }
+
+    .modal-body {
+        width: 620px;
+        height: 260px;
+        padding: 10px;
+        overflow: hidden;
+    }
+
+    .modal-body h2 {
+        margin: 0;
+    }
+
+    .modal-body p {
+        margin: 0;
+    }
+
+    .reaction-card {
+        display: flex;
+        flex-flow: row nowrap;
+        position: relative;
+
+        margin: 5px 0;
+        width: 100px;
+    }
+
+    .reaction {
+        border: none;
+        border-radius: 10px 0 0 10px;
+        color: #e0e0e0;
+
+        font-size: 14px;
+        padding: 5px;
+
+        text-align: center;
+        width: 40px;
+
+        -webkit-transition-duration: 0.3s;
+        -moz-transition-duration: 0.3s;
+        transition-duration: 0.3s;
+    }
+
+    .reaction:hover {
+        cursor: pointer;
+    }
+
+    .reaction-display {
+        background-color: #c6c6c6;
+        border-radius: 0 10px 10px 0;
+
+        font-size: 14px;
+        padding: 5px 10px;
+
+        text-align: right;
+        width: 60px;
+    }
+
+    .like {
+        background-color: #248004;
+    }
+
+    .like:hover {
+        background-color: #32a00c;
+    }
+
+    .dislike {
+        background-color: #c66404;
+    }
+
+    .dislike:hover {
+        background-color: #dc781e;
+    }
+
+    .modal-tags {
+        display: flex;
+        flex-flow: row wrap;
+    }
+
+    .modal-tag {
+        background-color: #248004;
+        border-radius: 10px;
+        color: #e0e0e0;
+        margin-bottom: 5px;
+        margin-right: 5px;
+        padding: 5px 10px;
+        text-decoration: none;
+
+        -webkit-transition-duration: 0.3s;
+        -moz-transition-duration: 0.3s;
+        transition-duration: 0.3s;
     }
 }

@@ -4,7 +4,8 @@ $(document).ready(function() {
         var split_id = btn_id.split("_");
 
         var img_id = split_id[1];
-        var comment = document.getElementById("comment_" + img_id).value;
+        var comment = document.getElementById("comment_" + img_id).value.replace(/'/g, '&#39;');
+        
         $.ajax({
             url: "inc/new_comment.php",
             type: 'post',

@@ -98,3 +98,4 @@
 </body>
 </html>
 <script src="js/show-password.js"></script>
+<script src="js/sticky-sidebar.js"></script>

@@ -26,7 +26,7 @@
 
         if ($error) {
             // echo '<div>Error! Error! Run with terror! A field is missing!</div>';
-            $msg = 'Please fill in the following fields.';
+            $msg = 'Please fill in the missing fields.';
         } else if (!$confirm) {
             // echo '<div>Yo, yo password cannot be confirmed, man.</div>';
             $msg = 'Password cannot be confirmed. Try again.';
@@ -39,16 +39,27 @@
             $pword = hash('sha512', $_POST['password']);
             $date = $db->real_escape_string(date("Y/m/d"));
 
-            $sql = "INSERT INTO user (first_name, last_name, user_name, birth_date, role, email, password, join_date) 
-                    VALUES ('$fname', '$lname', '$alias', '$dob', 'member', '$email', '$pword', '$date')";
+            $d1 = new DateTime($date);
+            $d2 = new DateTime($dob);
 
-            $result = $db->query($sql);
+            $diff = $d2->diff($d1);
 
-            if ($db->error) {
-                // echo '<div>' . $db->error . '</div>';
-                $msg = $db->error;
+            $age = $diff->y;
+
+            if ($age >= 13) {
+                $sql = "INSERT INTO user (first_name, last_name, user_name, birth_date, role, email, password, join_date) 
+                        VALUES ('$fname', '$lname', '$alias', '$dob', 'member', '$email', '$pword', '$date')";
+
+                $result = $db->query($sql);
+
+                if ($db->error) {
+                    // echo '<div>' . $db->error . '</div>';
+                    $msg = $db->error;
+                } else {
+                    $success = true;
+                }
             } else {
-                $success = true;
+                $msg = 'Sorry kid. You ain\'t old enough to join the site.';
             }
         }
     }
@@ -119,3 +130,4 @@
 </body>
 </html>
 <script src="js/show-password.js"></script>
+<script src="js/sticky-sidebar.js"></script>
